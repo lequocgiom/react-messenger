@@ -1,18 +1,45 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostFanpage, setCurrentPost } from "../../redux/actions/profiles";
+import {
+  fetchPostFanpage,
+  setCurrentPost,
+  setCurrentConversation,
+} from "../../redux/actions/profiles";
 import ConversationListItem from "../ConversationListItem";
 import ConversationSearch from "../ConversationSearch";
+import {
+  FETCH_TWILIO_MESSAGES,
+  GET_TWILIO_CHANNEL,
+} from "../../redux/actions/types";
 
 export default function TabPostContent(props) {
   //   const conversations = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.profile.posts);
+  const currentTab = useSelector((state) => state.profile.currentTab);
   //   const conversations = [{ name: "text" }];
 
-  useEffect(() => {
-    getPostFanpage();
-  }, []);
+  useEffect(
+    () => {
+      dispatch(
+        setCurrentConversation({
+          id: null,
+          displayName: null,
+          haveResponsePerson: false,
+        })
+      );
+      dispatch({
+        type: FETCH_TWILIO_MESSAGES,
+        payload: [],
+      });
+      dispatch({
+        type: GET_TWILIO_CHANNEL,
+        payload: null,
+      });
+      getPostFanpage();
+    },
+    [currentTab]
+  );
 
   const getPostFanpage = () => {
     console.log("in function getPostFanpage");

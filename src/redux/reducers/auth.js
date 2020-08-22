@@ -11,6 +11,7 @@ const initialState = {
   isAuthenticated: null,
   loading: true,
   user: null,
+  error: null,
 };
 
 export default function(state = initialState, action) {
@@ -21,13 +22,16 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload,
+        userDisplayName: localStorage.userName,
+        currentStaffId: localStorage.currentStaffId,
       };
     case LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
+      localStorage.setItem("userName", payload.data.user.displayName);
+      localStorage.setItem("currentStaffId", payload.data.id);
       return {
         ...state,
-        payload,
+        user: payload,
         isAuthenticated: true,
         loading: false,
       };
@@ -41,6 +45,7 @@ export default function(state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         user: null,
+        error: payload,
       };
 
     default:

@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import Login from "../Login";
 import PrivateRoute from "./PrivateRoute";
+import { loadUser } from "../../redux/actions/auth";
+import Register from "../Login/Register";
 
 function waitingComponent(ComponentItem) {
   return (props) => (
@@ -26,6 +28,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    store.dispatch(loadUser());
     store.dispatch(getTwilioUser());
   }
 
@@ -40,6 +43,7 @@ class App extends Component {
               component={waitingComponent(Messenger)}
             />
             {/* <Route exact path="/" render={waitingComponent(Messenger)} /> */}
+            <Route exact path="/register" component={Register} />
             <Route exact path="/login" render={waitingComponent(Login)} />
           </Switch>
         </Router>

@@ -1,24 +1,34 @@
 import { MessageOutlined, UserAddOutlined } from "@ant-design/icons";
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTwilioMessages } from "../../redux/actions/twilio";
+import {
+  fetchTwilioMessages,
+  getTwilioChannel,
+} from "../../redux/actions/twilio";
 import Compose from "../Compose";
 import Message from "../Message";
 import Toolbar from "../Toolbar";
 import ToolbarButton from "../ToolbarButton";
 import "./MessageList.css";
 import "./MessageList.scss";
+import Axios from "axios";
+import com from "../../utils";
+import { SET_CURRENT_STATUS } from "../../redux/actions/types";
 
 const { Text } = Typography;
 export default function MessageList(props) {
   const [messages, setMessages] = useState([]);
   const currentChannel = useSelector((state) => state.twilio.currentChannel);
   const messagesTwilio = useSelector((state) => state.twilio.messages);
+  const currentConversation = useSelector(
+    (state) => state.profile.currentConversation
+  );
   // const MY_USER_ID = "Hoàng Trần";
   const MY_USER_ID = useSelector((state) => state.profile.currentDisplayName);
+  const currentStatus = useSelector((state) => state.profile.currentStatus);
   const messagesEnd = useRef(null);
 
   const twilioUser = useSelector((state) => state.twilio.twilioUser);
@@ -96,6 +106,21 @@ export default function MessageList(props) {
     }
   };
 
+  const joinConversation = async () => {
+    await Axios.post(`${com.root}/api/v1/staff:joinConversation`, {
+      staffId: localStorage.currentStaffId,
+      conversationId: currentConversation,
+    });
+
+    dispatch({
+      type: SET_CURRENT_STATUS,
+      payload: true,
+    });
+
+    // dispatch(getTwilioChannel(twilioUser, `CHATBOX_${currentConversation}`));
+    // dispatch(fetchTwilioMessages(currentChannel));
+  };
+
   const renderMessages = () => {
     let i = 0;
     let messageCount = messages.length;
@@ -105,7 +130,7 @@ export default function MessageList(props) {
       let previous = messages[i - 1];
       let current = messages[i];
       let next = messages[i + 1];
-      let isMine = current.author === MY_USER_ID;
+      let isMine = current.author === localStorage.userName;
       let currentMoment = moment(current.timestamp);
       let prevBySameAuthor = false;
       let nextBySameAuthor = false;
@@ -160,31 +185,48 @@ export default function MessageList(props) {
   return (
     <div className="message-list">
       <Toolbar
-        title={MY_USER_ID ? `Conversation of ${MY_USER_ID}` : ""}
+        title={MY_USER_ID ? `Conversation of ${MY_USER_ID}` : "List Messages"}
         leftItems={
-          MY_USER_ID && [
-            // <ToolbarButton
-            //   key="info"
-            //   icon="ion-ios-information-circle-outline"
-            // />,
-            // <ToolbarButton key="video" icon="ion-ios-videocam" />,
-            // <ToolbarButton key="phone" icon="ion-ios-call" />
-            <>
-              <Avatar
-                size={36}
-                src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg"
-                className="cursor-pointer avatar-mr"
-              />
-              {MY_USER_ID && <Text>{MY_USER_ID}</Text>}
-            </>,
-            <MessageOutlined className="cursor-pointer" />,
-            <UserAddOutlined className="cursor-pointer" />,
-          ]
+          MY_USER_ID
+            ? [
+                // <ToolbarButton
+                //   key="info"
+                //   icon="ion-ios-information-circle-outline"
+                // />,
+                // <ToolbarButton key="video" icon="ion-ios-videocam" />,
+                // <ToolbarButton key="phone" icon="ion-ios-call" />
+                <>
+                  <Avatar
+                    size={36}
+                    src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg"
+                    className="cursor-pointer avatar-mr"
+                  />
+                  {MY_USER_ID && <Text>{MY_USER_ID}</Text>}
+                </>,
+                <MessageOutlined className="cursor-pointer" />,
+                <UserAddOutlined className="cursor-pointer" />,
+              ]
+            : []
         }
       />
 
-      <div className="message-list-container">{renderMessages()}</div>
+      {currentStatus && (
+        <div className="message-list-container">{renderMessages()}</div>
+      )}
+      {!currentStatus && (
+        <div className="button-join-wrapper">
+          <Typography>
+            You are not in the conversation, please join to see messages and
+            chat with other people
+          </Typography>
 
+          {MY_USER_ID && !currentStatus && (
+            <Button type="primary" onClick={joinConversation}>
+              Join the conversation
+            </Button>
+          )}
+        </div>
+      )}
       <Compose
         rightItems={[
           <ToolbarButton key="photo" icon="ion-ios-camera" />,

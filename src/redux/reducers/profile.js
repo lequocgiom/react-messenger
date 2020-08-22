@@ -8,6 +8,7 @@ import {
   SET_CURRENT_POST,
   FETCH_COMMENT_BYPOST,
   FETCH_COMMENT_BYPOST_ERROR,
+  SET_CURRENT_STATUS,
 } from "../actions/types";
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   loading: true,
   currentConversation: null,
   currentDisplayName: null,
+  currentStatus: false,
   posts: [],
   error: null,
   currentTab: 2,
@@ -42,6 +44,7 @@ export default function(state = initialState, action) {
         ...state,
         currentConversation: payload.id,
         currentDisplayName: payload.displayName,
+        currentStatus: payload.haveResponsePerson,
       };
     case SET_CURRENT_TAB:
       return {
@@ -76,6 +79,11 @@ export default function(state = initialState, action) {
         ...state,
         error: payload,
         loading: false,
+      };
+    case SET_CURRENT_STATUS:
+      return {
+        ...state,
+        currentStatus: payload,
       };
     default:
       return state;

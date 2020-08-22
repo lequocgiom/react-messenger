@@ -10,14 +10,20 @@ export default function Compose(props) {
   const currentConversation = useSelector(
     (state) => state.profile.currentConversation
   );
+  const currentStatus = useSelector((state) => state.profile.currentStatus);
+
   const handlePressEnter = async () => {
-    console.log("call api send msg", input);
-    await Axios.post(`${com.root}/api/v1/chat:sendMessageToFacebook`, {
-      staffId: 1,
-      conversationId: currentConversation,
-      content: input,
-    });
-    setInput("");
+    if (currentStatus) {
+      console.log("call api send msg", input);
+      await Axios.post(`${com.root}/api/v1/chat:sendMessageToFacebook`, {
+        staffId: localStorage.currentStaffId,
+        conversationId: currentConversation,
+        content: input,
+      });
+      setInput("");
+    } else {
+      window.alert("Please join the channel to send message!");
+    }
   };
   return (
     <div className="compose">

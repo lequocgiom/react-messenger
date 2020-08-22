@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchConversations,
   setCurrentConversation,
+  setCurrentPost,
 } from "../../redux/actions/profiles";
 import { getTwilioChannel } from "../../redux/actions/twilio";
 import ConversationListItem from "../ConversationListItem";
@@ -12,6 +13,7 @@ export default function TabMessageContent(props) {
   //   const conversations = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
   const conversations = useSelector((state) => state.profile.conversations);
+  const currentTab = useSelector((state) => state.profile.currentTab);
   const twilioUser = useSelector((state) => state.twilio.twilioUser);
   //   const conversations = [{ name: "text" }];
 
@@ -20,13 +22,22 @@ export default function TabMessageContent(props) {
     dispatch(fetchConversations());
     // setConversations([...conversations, ...newConversations]);
   };
-  useEffect(() => {
-    getConversations();
-  }, []);
+  useEffect(
+    () => {
+      dispatch(setCurrentPost(null));
+      getConversations();
+    },
+    [currentTab]
+  );
 
-  const handleClickListItem = (channelName, id, displayName) => {
-    console.log(channelName, id);
-    dispatch(setCurrentConversation({ id, displayName }));
+  const handleClickListItem = (
+    channelName,
+    id,
+    displayName,
+    haveResponsePerson
+  ) => {
+    // console.log(channelName, id);
+    dispatch(setCurrentConversation({ id, displayName, haveResponsePerson }));
     dispatch(getTwilioChannel(twilioUser, channelName));
   };
   return (
@@ -39,7 +50,8 @@ export default function TabMessageContent(props) {
               handleClickListItem(
                 conversation.channelName,
                 conversation.id,
-                conversation.displayName
+                conversation.displayName,
+                conversation.haveResponsePerson
               )
             }
             {...conversation}

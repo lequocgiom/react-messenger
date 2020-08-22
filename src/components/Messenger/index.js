@@ -7,18 +7,20 @@ import { useSelector } from "react-redux";
 export default function Messenger(props) {
   const currentTab = useSelector((state) => state.profile.currentTab);
   return (
-    <div className="messenger">
-      <div className="scrollable sidebar">
-        <ConversationList />
-      </div>
+    <>
+      <div className="messenger">
+        <div className="scrollable sidebar">
+          <ConversationList />
+        </div>
 
-      <div className="scrollable content">
-        {currentTab == 2 ? (
-          <MessageList />
-        ) : currentTab == 3 ? (
-          <CommentList />
-        ) : null}
+        <div className="scrollable content">
+          {currentTab == 2 ? (
+            <MessageList />
+          ) : currentTab == 3 ? (
+            <CommentList />
+          ) : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

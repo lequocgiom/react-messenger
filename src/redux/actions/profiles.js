@@ -26,6 +26,7 @@ export const fetchConversations = () => async (dispatch) => {
         clientId: item.id,
         userId: item.client.user.id,
         displayName: item.client.user.displayName,
+        haveResponsePerson: item.haveResponsePerson,
       };
     });
     dispatch({

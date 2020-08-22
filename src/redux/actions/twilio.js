@@ -56,7 +56,7 @@ export const getTwilioChannel = (user, channelName) => async (dispatch) => {
 
 export const fetchTwilioMessages = (channel) => async (dispatch) => {
   try {
-    const messages = await channel.getMessages(20);
+    const messages = await channel.getMessages(40);
     dispatch({
       type: FETCH_TWILIO_MESSAGES,
       payload: messages,

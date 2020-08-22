@@ -12,6 +12,9 @@ import "./ConversationList.scss";
 import TabMessageContent from "./TabMessageContent";
 import TabPostContent from "./TabPostContent";
 
+import { Button } from "antd";
+import { PoweroffOutlined } from "@ant-design/icons";
+import { logout } from "../../redux/actions/auth";
 const { TabPane } = Tabs;
 
 export default function ConversationList(props) {
@@ -21,47 +24,48 @@ export default function ConversationList(props) {
     dispatch(setCurrentTab(value));
   };
   return (
-    <div className="conversation-list">
-      <Tabs
-        defaultActiveKey="2"
-        className="Toolbar-tab"
-        onChange={(value) => onTabsChange(value)}
-      >
-        <TabPane
-          tab={
-            <span>
-              <InboxOutlined />
-              Tất cả
-            </span>
-          }
-          key="1"
+    <>
+      <div className="conversation-list">
+        <Tabs
+          defaultActiveKey="2"
+          className="Toolbar-tab"
+          onChange={(value) => onTabsChange(value)}
         >
-          <TabMessageContent />
-        </TabPane>
-        <TabPane
-          tab={
-            <span>
-              <MessageOutlined />
-              Tin nhắn
-            </span>
-          }
-          key="2"
-        >
-          <TabMessageContent />
-        </TabPane>
-        <TabPane
-          tab={
-            <span>
-              <FacebookOutlined />
-              Bài viết
-            </span>
-          }
-          key="3"
-        >
-          <TabPostContent />
-        </TabPane>
-      </Tabs>
-      {/* <Toolbar
+          <TabPane
+            tab={
+              <span>
+                <InboxOutlined />
+                Tất cả
+              </span>
+            }
+            key="1"
+          >
+            <TabMessageContent />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <MessageOutlined />
+                Tin nhắn
+              </span>
+            }
+            key="2"
+          >
+            <TabMessageContent />
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <FacebookOutlined />
+                Bài viết
+              </span>
+            }
+            key="3"
+          >
+            <TabPostContent />
+          </TabPane>
+        </Tabs>
+        {/* <Toolbar
           title="Messenger"
           leftItems={[
             <ToolbarButton key="cog" icon="ion-ios-cog" />
@@ -70,6 +74,16 @@ export default function ConversationList(props) {
             <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
           ]}
         /> */}
-    </div>
+      </div>
+
+      <Button
+        type="primary"
+        icon={<PoweroffOutlined />}
+        style={{ position: "absolute", bottom: "0px", width: "100%" }}
+        onClick={() => dispatch(logout())}
+      >
+        Log Out
+      </Button>
+    </>
   );
 }
