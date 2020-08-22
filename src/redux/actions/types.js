@@ -23,3 +23,10 @@ export const FETCH_TWILIO_MESSAGES_ERROR = "FETCH_TWILIO_MESSAGES_ERROR";
 
 export const SET_CURRENT_TAB = "SET_CURRENT_TAB";
 export const SET_CURRENT_POST = "SET_CURRENT_POST";
+
+export const USER_LOADED = "USER_LOADED";
+export const AUTH_ERROR = "AUTH_ERROR";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAIL = "LOGIN_FAIL";
+export const LOGOUT = "LOGOUT";
+export const GET_PROFILE = "GET_PROFILE";
