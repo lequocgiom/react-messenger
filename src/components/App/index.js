@@ -1,11 +1,21 @@
-import React, { Component } from "react";
-import Messenger from "../Messenger";
-import axios from "axios";
+import React, { Component, Suspense } from "react";
 import { Provider } from "react-redux";
+import { getTwilioUser } from "../../redux/actions/twilio";
 import store from "../../redux/store";
-import com from "../../utils";
+import Messenger from "../Messenger";
 
-const Chat = require("twilio-chat");
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import LoadingSpinner from "./LoadingSpinner";
+import Login from "../Login";
+import PrivateRoute from "./PrivateRoute";
+
+function waitingComponent(ComponentItem) {
+  return (props) => (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ComponentItem {...props} />
+    </Suspense>
+  );
+}
 
 class App extends Component {
   constructor(props) {
@@ -16,30 +26,29 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.handleTwilioFlow();
+    store.dispatch(getTwilioUser());
   }
-
-  handleTwilioFlow = () => {
-    axios
-      .get(`${com.root}/api/v1/twilio:generateJwt?email=voduykhanhnc@gmail.com`)
-      .then((result) => {
-        Chat.Client.create(result.data.data).then((user) => {
-          // console.log("twilio user:", user);
-          this.setState({ twilioUser: user });
-        });
-      })
-      .catch((e) => console.log("get twilio jwt error: ", e));
-  };
 
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <Messenger />
-        </div>
+        <Router>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/"
+              component={waitingComponent(Messenger)}
+            />
+            {/* <Route exact path="/" render={waitingComponent(Messenger)} /> */}
+            <Route exact path="/login" render={waitingComponent(Login)} />
+          </Switch>
+        </Router>
       </Provider>
     );
   }
 }
 
 export default App;
+// </Router><div className="App">
+//             <Messenger />
+//           </div>

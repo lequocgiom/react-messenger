@@ -1,3 +1,4 @@
 import { combineReducers } from "redux";
 import profile from "./profile";
-export default combineReducers({ profile });
+import twilio from "./twilio";
+export default combineReducers({ profile, twilio });

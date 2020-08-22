@@ -1,61 +1,32 @@
-import React, { useState, useEffect, Fragment } from "react";
-import ConversationSearch from "../ConversationSearch";
-import ConversationListItem from "../ConversationListItem";
-import Toolbar from "../Toolbar";
-import ToolbarButton from "../ToolbarButton";
-import axios from "axios";
-import { Tabs } from "antd";
 import {
+  FacebookOutlined,
   InboxOutlined,
   MessageOutlined,
-  FacebookOutlined,
 } from "@ant-design/icons";
-
+import { Tabs } from "antd";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentTab } from "../../redux/actions/profiles";
 import "./ConversationList.css";
 import "./ConversationList.scss";
-import { fetchConversations } from "../../redux/actions/profiles";
-import { useSelector, useDispatch } from "react-redux";
-const { TabPane } = Tabs;
+import TabMessageContent from "./TabMessageContent";
+import TabPostContent from "./TabPostContent";
 
-function tabContent(props) {
-  const conversations = useSelector((state) => state.conversations);
-  return (
-    <Fragment>
-      <ConversationSearch />
-      {conversations &&
-        conversations.map((conversation) => {
-          console.log(conversation);
-          return (
-            <h1>{conversation.name}</h1>
-            /*<ConversationListItem key={conversation.name} data={conversation} />*/
-          );
-        })}
-    </Fragment>
-  );
-}
+const { TabPane } = Tabs;
 
 export default function ConversationList(props) {
   const dispatch = useDispatch();
-  // const [conversations, setConversations] = useState([]);
-  // const conversations = useSelector((state) => state.conversations);
-
-  // const conversations = [{ name: "test" }];
-  useEffect(
-    () => {
-      getConversations();
-    },
-    [getConversations]
-  );
-
-  const getConversations = () => {
-    // console.log("in function getconversations");
-    dispatch(fetchConversations());
-    // setConversations([...conversations, ...newConversations]);
+  const onTabsChange = (value) => {
+    console.log("ontabchangd", value);
+    dispatch(setCurrentTab(value));
   };
-
   return (
     <div className="conversation-list">
-      <Tabs defaultActiveKey="2" className="Toolbar-tab">
+      <Tabs
+        defaultActiveKey="2"
+        className="Toolbar-tab"
+        onChange={(value) => onTabsChange(value)}
+      >
         <TabPane
           tab={
             <span>
@@ -65,7 +36,7 @@ export default function ConversationList(props) {
           }
           key="1"
         >
-          <tabContent />
+          <TabMessageContent />
         </TabPane>
         <TabPane
           tab={
@@ -76,18 +47,18 @@ export default function ConversationList(props) {
           }
           key="2"
         >
-          {tabContent}
+          <TabMessageContent />
         </TabPane>
         <TabPane
           tab={
             <span>
               <FacebookOutlined />
-              Bình luận
+              Bài viết
             </span>
           }
           key="3"
         >
-          {tabContent}
+          <TabPostContent />
         </TabPane>
       </Tabs>
       {/* <Toolbar

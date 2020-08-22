@@ -1,101 +1,99 @@
-import React, { useEffect, useState } from "react";
+import { MessageOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import Avatar from "antd/lib/avatar/avatar";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTwilioMessages } from "../../redux/actions/twilio";
 import Compose from "../Compose";
+import Message from "../Message";
 import Toolbar from "../Toolbar";
 import ToolbarButton from "../ToolbarButton";
-import Message from "../Message";
-import moment from "moment";
-
 import "./MessageList.css";
-import Avatar from "antd/lib/avatar/avatar";
-import { Typography, Space } from "antd";
-
-import { MessageOutlined, UserAddOutlined } from "@ant-design/icons";
 import "./MessageList.scss";
 
-const MY_USER_ID = "apple";
-
-const { Text, Link } = Typography;
+const { Text } = Typography;
 export default function MessageList(props) {
   const [messages, setMessages] = useState([]);
+  const currentChannel = useSelector((state) => state.twilio.currentChannel);
+  const messagesTwilio = useSelector((state) => state.twilio.messages);
+  // const MY_USER_ID = "Hoàng Trần";
+  const MY_USER_ID = useSelector((state) => state.profile.currentDisplayName);
+  const messagesEnd = useRef(null);
 
-  useEffect(() => {
-    getMessages();
-  }, []);
+  const twilioUser = useSelector((state) => state.twilio.twilioUser);
+  // const currentChannel = useSelector((state) => state.twilio.currentChannel);
+  // const messages = useSelector((state) => state.twilio.messages);
+  const dispatch = useDispatch();
+  useEffect(
+    () => {
+      dispatch(fetchTwilioMessages(currentChannel));
+      return () => {};
+    },
+    [twilioUser, currentChannel]
+  );
 
-  const getMessages = () => {
-    var tempMessages = [
-      {
-        id: 1,
-        author: "apple",
-        message:
-          "Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 2,
-        author: "orange",
-        message:
-          "It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 3,
-        author: "orange",
-        message:
-          "Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 4,
-        author: "apple",
-        message:
-          "It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 5,
-        author: "apple",
-        message:
-          "Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 6,
-        author: "apple",
-        message:
-          "It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 7,
-        author: "orange",
-        message:
-          "Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 8,
-        author: "orange",
-        message:
-          "It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 9,
-        author: "apple",
-        message:
-          "Hello world! This is a long message that will hopefully get wrapped by our message bubble component! We will see how well it works.",
-        timestamp: new Date().getTime(),
-      },
-      {
-        id: 10,
-        author: "orange",
-        message:
-          "It looks like it wraps exactly as it is supposed to. Lets see what a reply looks like!",
-        timestamp: new Date().getTime(),
-      },
-    ];
-    setMessages([...messages, ...tempMessages]);
+  useEffect(
+    () => {
+      mapTwilioMessages();
+      scrollToBottom();
+    },
+    [messagesTwilio]
+  );
+
+  useEffect(
+    () => {
+      console.log(messages);
+      scrollToBottom();
+    },
+    [messages]
+  );
+  useEffect(
+    () => {
+      console.log("use effect current channel on message added called");
+      if (currentChannel) {
+        currentChannel.on("messageAdded", function(message) {
+          console.log(messages);
+          const newMessages = [...messages];
+          console.log("messaged added", message);
+          setMessages(
+            newMessages.concat({
+              id: message.index,
+              author: message.author,
+              message: message.body,
+              timestamp: message.timestamp,
+            })
+          );
+          scrollToBottom();
+        });
+      }
+
+      return () => {
+        console.log("clean up messaged added");
+      };
+    },
+    [currentChannel, messages]
+  );
+
+  const scrollToBottom = () => {
+    console.log("Scroll to Bottom");
+    messagesEnd.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
+  };
+
+  const mapTwilioMessages = () => {
+    if (messagesTwilio && messagesTwilio.items) {
+      const mapedMessages = messagesTwilio.items.map((item) => ({
+        id: item.index,
+        author: item.author,
+        message: item.body,
+        timestamp: item.timestamp,
+      }));
+      setMessages(mapedMessages);
+    }
   };
 
   const renderMessages = () => {
@@ -162,25 +160,27 @@ export default function MessageList(props) {
   return (
     <div className="message-list">
       <Toolbar
-        title="Conversation Title"
-        leftItems={[
-          // <ToolbarButton
-          //   key="info"
-          //   icon="ion-ios-information-circle-outline"
-          // />,
-          // <ToolbarButton key="video" icon="ion-ios-videocam" />,
-          // <ToolbarButton key="phone" icon="ion-ios-call" />
-          <>
-            <Avatar
-              size={36}
-              src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg"
-              className="cursor-pointer avatar-mr"
-            />
-            <Text>Li Qi Dan</Text>
-          </>,
-          <MessageOutlined className="cursor-pointer" />,
-          <UserAddOutlined className="cursor-pointer" />,
-        ]}
+        title={MY_USER_ID ? `Conversation of ${MY_USER_ID}` : ""}
+        leftItems={
+          MY_USER_ID && [
+            // <ToolbarButton
+            //   key="info"
+            //   icon="ion-ios-information-circle-outline"
+            // />,
+            // <ToolbarButton key="video" icon="ion-ios-videocam" />,
+            // <ToolbarButton key="phone" icon="ion-ios-call" />
+            <>
+              <Avatar
+                size={36}
+                src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg"
+                className="cursor-pointer avatar-mr"
+              />
+              {MY_USER_ID && <Text>{MY_USER_ID}</Text>}
+            </>,
+            <MessageOutlined className="cursor-pointer" />,
+            <UserAddOutlined className="cursor-pointer" />,
+          ]
+        }
       />
 
       <div className="message-list-container">{renderMessages()}</div>
@@ -195,6 +195,21 @@ export default function MessageList(props) {
           <ToolbarButton key="emoji" icon="ion-ios-happy" />,
         ]}
       />
+      <div
+        style={{
+          float: "left",
+          clear: "both",
+          position: "relative",
+          top: "5px",
+          visibility: "hidden",
+        }}
+        // ref={(el) => {
+        //   messagesEnd = el;
+        // }}
+        ref={messagesEnd}
+      >
+        ok
+      </div>
     </div>
   );
 }
