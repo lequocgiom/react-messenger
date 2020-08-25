@@ -22,7 +22,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 50px;
 }
 
 .post-meta {
@@ -30,8 +29,20 @@
   display: flex;
   border-top: 1px solid #3333;
   border-bottom: 1px solid #3333;
+  .post-after {
+    position: relative;
+  }
   & > :not(:last-child):after {
+    position: absolute;
     content: "";
     border-right: 1px solid #3333;
+    top: 50%;
+    right: -8px;
+    height: 18px;
+    transform: translateY(-50%);
   }
+}
+
+.card {
+  box-shadow: 5px 10px 8px #888888;
 }

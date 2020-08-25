@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchConversations,
@@ -9,7 +9,7 @@ import {
 } from "../../redux/actions/profiles";
 import { getTwilioChannel } from "../../redux/actions/twilio";
 import ConversationListItem from "../ConversationListItem";
-
+import LoadingSpinner from "../App/LoadingSpinner";
 export default function TabAllContent(props) {
   //   const conversations = useSelector((state) => state.conversations);
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ export default function TabAllContent(props) {
   const posts = useSelector((state) => state.profile.posts);
   const currentTab = useSelector((state) => state.profile.currentTab);
   const twilioUser = useSelector((state) => state.twilio.twilioUser);
+  const loadingPost = useSelector((state) => state.profile.loadingPost);
   //   const conversations = [{ name: "text" }];
 
   const getConversations = () => {
@@ -52,7 +53,7 @@ export default function TabAllContent(props) {
       dispatch(setCurrentConversation({ id, displayName, haveResponsePerson }));
       dispatch(getTwilioChannel(twilioUser, channelName));
     } else {
-      dispatch(setCurrentPost(id));
+      dispatch(setCurrentPost(item));
     }
   };
 
@@ -66,14 +67,18 @@ export default function TabAllContent(props) {
   return (
     <Fragment>
       {/* <ConversationSearch /> */}
-      {allContents &&
+      {!loadingPost ? (
+        allContents &&
         allContents.map((item) => (
           <ConversationListItem
             handleClickListItem={() => handleClickListItem(item)}
             {...item}
             photo={`logo_user.jpg`}
           />
-        ))}
+        ))
+      ) : (
+        <LoadingSpinner />
+      )}
     </Fragment>
   );
 }

@@ -2,13 +2,14 @@ import {
   FETCH_CONVERSATION,
   FETCH_CONVERSATION_ERROR,
   SET_CURRENT_CONVERSATION,
-  FETCH_POST_FANPAGE,
   FETCH_POST_FANPAGE_ERROR,
   SET_CURRENT_TAB,
   SET_CURRENT_POST,
   FETCH_COMMENT_BYPOST,
   FETCH_COMMENT_BYPOST_ERROR,
   SET_CURRENT_TYPE,
+  FETCH_POST_FANPAGE_START,
+  FETCH_POST_FANPAGE_SUCCESS,
 } from "./types";
 import com from "../../utils";
 import Axios from "axios";
@@ -51,16 +52,21 @@ export const setCurrentConversation = (payload) => (dispatch) => {
 
 export const fetchPostFanpage = () => async (dispatch) => {
   //   console.log("fetch conversation actions");
+  dispatch({
+    type: FETCH_POST_FANPAGE_START,
+  });
   try {
     const res = await Axios.get(`${com.root}/api/v1/fetchAllPostInFanPage`);
     // console.log(res);
     dispatch({
-      type: FETCH_POST_FANPAGE,
+      type: FETCH_POST_FANPAGE_SUCCESS,
       payload: res.data.data.feed.data
-        .filter((post) => post.message || post.story)
+        .filter((post) => (post.full_picture && post.message) || post.story)
         .map((post) => ({
           id: post.id,
           name: post.message || post.story,
+          full_picture: post.full_picture,
+          created_time: post.created_time,
         })),
     });
   } catch (err) {
@@ -78,10 +84,10 @@ export const setCurrentTab = (id) => (dispatch) => {
   });
 };
 
-export const setCurrentPost = (id) => (dispatch) => {
+export const setCurrentPost = (post) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_POST,
-    payload: id,
+    payload: post,
   });
 };
 

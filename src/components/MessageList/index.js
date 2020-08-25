@@ -17,6 +17,7 @@ import "./MessageList.scss";
 import Axios from "axios";
 import com from "../../utils";
 import { SET_CURRENT_STATUS } from "../../redux/actions/types";
+import LoadingSpinner from "../App/LoadingSpinner";
 
 const { Text } = Typography;
 export default function MessageList(props) {
@@ -32,6 +33,7 @@ export default function MessageList(props) {
   const messagesEnd = useRef(null);
 
   const twilioUser = useSelector((state) => state.twilio.twilioUser);
+  const loadingMessages = useSelector((state) => state.twilio.loadingMessages);
   // const currentChannel = useSelector((state) => state.twilio.currentChannel);
   // const messages = useSelector((state) => state.twilio.messages);
   const dispatch = useDispatch();
@@ -210,8 +212,12 @@ export default function MessageList(props) {
         }
       />
 
-      {currentStatus && (
-        <div className="message-list-container">{renderMessages()}</div>
+      {!loadingMessages ? (
+        currentStatus && (
+          <div className="message-list-container">{renderMessages()}</div>
+        )
+      ) : (
+        <LoadingSpinner />
       )}
       {!currentStatus && (
         <div className="button-join-wrapper">

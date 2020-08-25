@@ -2,6 +2,8 @@
   display: flex;
   align-items: center;
   padding: 10px;
+
+  border-bottom: 1px solid #3333;
 }
 
 .conversation-list-item:hover {
@@ -19,7 +21,7 @@
 
 .conversation-title {
   font-size: 14px;
-  font-weight: bold;
+  /* font-weight: bold; */
   text-transform: capitalize;
   margin: 0;
 

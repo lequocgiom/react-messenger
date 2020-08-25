@@ -2,7 +2,7 @@ import {
   FETCH_CONVERSATION,
   FETCH_CONVERSATION_ERROR,
   SET_CURRENT_CONVERSATION,
-  FETCH_POST_FANPAGE,
+  FETCH_POST_FANPAGE_START,
   FETCH_POST_FANPAGE_ERROR,
   SET_CURRENT_TAB,
   SET_CURRENT_POST,
@@ -10,6 +10,7 @@ import {
   FETCH_COMMENT_BYPOST_ERROR,
   SET_CURRENT_STATUS,
   SET_CURRENT_TYPE,
+  FETCH_POST_FANPAGE_SUCCESS,
 } from "../actions/types";
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
   currentTab: 2,
   currentPost: null,
   comments: [],
+  loadingPost: false,
 };
 
 export default function(state = initialState, action) {
@@ -52,17 +54,22 @@ export default function(state = initialState, action) {
         ...state,
         currentTab: payload,
       };
-    case FETCH_POST_FANPAGE:
+    case FETCH_POST_FANPAGE_START:
+      return {
+        ...state,
+        loadingPost: true,
+      };
+    case FETCH_POST_FANPAGE_SUCCESS:
       return {
         ...state,
         posts: payload,
-        loading: false,
+        loadingPost: false,
       };
     case FETCH_POST_FANPAGE_ERROR:
       return {
         ...state,
         error: payload,
-        loading: false,
+        loadingPost: false,
       };
     case SET_CURRENT_POST:
       return {

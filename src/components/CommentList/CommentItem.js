@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 import { Avatar, Card, Row, Button } from "antd";
 import "./CommentItem.scss";
 import { Typography, Space } from "antd";
+import DetailItem from "./DetailItem";
+import { useSelector } from "react-redux";
+import moment from "moment";
+const { Text, Link, Paragraph, Title } = Typography;
 
-const { Text, Link, Paragraph } = Typography;
-
-function CommentItem(props) {
+function CommentItem({ comments }) {
+  const currentPost = useSelector((state) => state.profile.currentPost);
   return (
     <Card className="card">
       {/* <!-- post title start --> */}
@@ -23,53 +26,54 @@ function CommentItem(props) {
         {/* <!-- profile picture end --> */}
 
         <div className="posted-author">
-          <Text className="author">merry watson</Text>
-          <Text className="post-time">20 min ago</Text>
+          <Title level={4} className="author">
+            Techres Intern
+          </Title>
+          <Typography className="post-time">
+            {moment(currentPost.created_time).fromNow()}
+            {/* 20 mintues ago */}
+          </Typography>
         </div>
       </Row>
       {/* <!-- post title start --> */}
       <div className="post-content">
         <div className="post-thumb-gallery">
           <figure className="post-thumb img-popup">
-            <a href="images/post/post-large-1.jpg">
-              <img
-                src="https://c4.wallpaperflare.com/wallpaper/500/442/354/outrun-vaporwave-hd-wallpaper-preview.jpg"
-                alt="post image"
-              />
+            <a href={currentPost.full_picture}>
+              <img src={currentPost.full_picture} alt="post image" />
             </a>
           </figure>
         </div>
         <Paragraph className="post-title" strong>
-          Josephin Doe posted on your timeline
+          Techres Intern posted on your timeline
         </Paragraph>
-        <Paragraph className="post-desc">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem alias
-          rem optio porro saepe earum aut iure laboriosam magni ducimus fuga,
-          doloribus nulla architecto cupiditate quasi deserunt assumenda numquam
-          necessitatibus.
-        </Paragraph>
+        <Paragraph className="post-desc">{currentPost.name}</Paragraph>
         <div className="post-meta">
-          <div type="primary" className="post-meta-like mr-2">
+          <div type="primary" className="post-meta-like post-after mr-2">
             <Row align="middle">
-              <ion-icon name="heart-outline"></ion-icon>
-              <span className="ml-1">Likes(20)</span>
+              <ion-icon name="heart-outline" />
+              <span className="ml-1">Likes (20)</span>
               {/* <strong>201</strong> */}
             </Row>
           </div>
-          <div type="primary" className="post-comment mr-2">
+          <div type="primary" className="post-comment post-after mr-2">
             <Row align="middle">
-              <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-              <span className="ml-1">Comments(41)</span>
+              <ion-icon name="chatbox-ellipses-outline" />
+              <span className="ml-1">Comments ({comments.length})</span>
             </Row>
           </div>
           <div type="primary" className="post-share mr-2">
             <Row align="middle">
-              <ion-icon name="share-social-outline"></ion-icon>
-              <span className="ml-1">Shares(07)</span>
+              <ion-icon name="share-social-outline" />
+              <span className="ml-1">Shares (07)</span>
             </Row>
           </div>
         </div>
       </div>
+      <Space />
+      {comments.map((comment) => (
+        <DetailItem comment={comment} />
+      ))}
     </Card>
   );
 }

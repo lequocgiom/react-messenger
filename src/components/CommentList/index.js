@@ -27,7 +27,7 @@ export default function CommentList(props) {
       if (currentPost) {
         console.log(currentPost);
         Axios.get(
-          `${com.root}/api/v1/fetchAllCommentByPost/${currentPost}`
+          `${com.root}/api/v1/fetchAllCommentByPost/${currentPost.id}`
         ).then((res) => {
           console.log(res.data.data.comment.data);
           setData(res.data.data.comment.data);
@@ -90,7 +90,8 @@ export default function CommentList(props) {
           hasMore={!loading && hasMore}
           useWindow={false}
         >
-          <CommentItem/>
+          {currentPost && <CommentItem comments={data} />}
+
           {/* <List
             dataSource={data}
             renderItem={(item) => (

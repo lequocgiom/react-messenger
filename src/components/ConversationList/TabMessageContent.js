@@ -9,6 +9,8 @@ import {
 import { getTwilioChannel } from "../../redux/actions/twilio";
 import ConversationListItem from "../ConversationListItem";
 import ConversationSearch from "../ConversationSearch";
+import Loading from "../Loading";
+import LoadingSpinner from "../App/LoadingSpinner";
 
 export default function TabMessageContent(props) {
   //   const conversations = useSelector((state) => state.conversations);
@@ -16,6 +18,7 @@ export default function TabMessageContent(props) {
   const conversations = useSelector((state) => state.profile.conversations);
   const currentTab = useSelector((state) => state.profile.currentTab);
   const twilioUser = useSelector((state) => state.twilio.twilioUser);
+  const loadingUser = useSelector((state) => state.twilio.loadingUser);
   //   const conversations = [{ name: "text" }];
 
   const getConversations = () => {
@@ -52,7 +55,8 @@ export default function TabMessageContent(props) {
   return (
     <Fragment>
       {/* <ConversationSearch /> */}
-      {conversations &&
+      {!loadingUser ? (
+        conversations &&
         conversations.map((conversation) => (
           <ConversationListItem
             handleClickListItem={() =>
@@ -66,7 +70,10 @@ export default function TabMessageContent(props) {
             {...conversation}
             photo={`logo_user.jpg`}
           />
-        ))}
+        ))
+      ) : (
+        <LoadingSpinner />
+      )}
     </Fragment>
   );
 }

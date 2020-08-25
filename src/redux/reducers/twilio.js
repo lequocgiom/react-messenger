@@ -1,16 +1,21 @@
 import {
-  GET_TWILIO_USER,
+  GET_TWILIO_USER_START,
+  GET_TWILIO_USER_SUCCESS,
   GET_TWILIO_USER_ERROR,
   FETCH_TWILIO_MESSAGES,
   FETCH_TWILIO_MESSAGES_ERROR,
   GET_TWILIO_CHANNEL,
   GET_TWILIO_CHANNEL_ERROR,
+  FETCH_TWILIO_MESSAGES_START,
+  FETCH_TWILIO_MESSAGES_SUCCESS,
 } from "../actions/types";
 
 const initialState = {
   twilioUser: [],
   error: {},
-  loading: true,
+  errorLoadingUser: null,
+  loadingUser: false,
+  loadingMessages: false,
   messages: [],
   currentChannel: null,
 };
@@ -18,17 +23,22 @@ const initialState = {
 export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case GET_TWILIO_USER:
+    case GET_TWILIO_USER_START:
+      return {
+        ...state,
+        loadingUser: true,
+      };
+    case GET_TWILIO_USER_SUCCESS:
       return {
         ...state,
         twilioUser: payload,
-        loading: false,
+        loadingUser: false,
       };
     case GET_TWILIO_USER_ERROR:
       return {
         ...state,
-        error: payload,
-        loading: false,
+        errorLoadingUser: payload,
+        loadingUser: false,
       };
 
     case GET_TWILIO_CHANNEL:
@@ -44,17 +54,22 @@ export default function(state = initialState, action) {
         error: payload,
         loading: false,
       };
-    case FETCH_TWILIO_MESSAGES:
+    case FETCH_TWILIO_MESSAGES_START:
+      return {
+        ...state,
+        loadingMessages: true,
+      };
+    case FETCH_TWILIO_MESSAGES_SUCCESS:
       return {
         ...state,
         messages: payload,
-        loading: false,
+        loadingMessages: false,
       };
     case FETCH_TWILIO_MESSAGES_ERROR:
       return {
         ...state,
         error: payload,
-        loading: false,
+        loadingMessages: false,
       };
     default:
       return state;
