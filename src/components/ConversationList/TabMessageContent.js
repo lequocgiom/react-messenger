@@ -4,6 +4,7 @@ import {
   fetchConversations,
   setCurrentConversation,
   setCurrentPost,
+  setCurrentType,
 } from "../../redux/actions/profiles";
 import { getTwilioChannel } from "../../redux/actions/twilio";
 import ConversationListItem from "../ConversationListItem";
@@ -24,7 +25,15 @@ export default function TabMessageContent(props) {
   };
   useEffect(
     () => {
+      dispatch(
+        setCurrentConversation({
+          id: null,
+          displayName: null,
+          haveResponsePerson: false,
+        })
+      );
       dispatch(setCurrentPost(null));
+      dispatch(setCurrentType(null));
       getConversations();
     },
     [currentTab]
@@ -42,7 +51,7 @@ export default function TabMessageContent(props) {
   };
   return (
     <Fragment>
-      <ConversationSearch />
+      {/* <ConversationSearch /> */}
       {conversations &&
         conversations.map((conversation) => (
           <ConversationListItem
@@ -55,7 +64,7 @@ export default function TabMessageContent(props) {
               )
             }
             {...conversation}
-            photo={`https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg`}
+            photo={`logo_user.jpg`}
           />
         ))}
     </Fragment>

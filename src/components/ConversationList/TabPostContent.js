@@ -4,9 +4,9 @@ import {
   fetchPostFanpage,
   setCurrentPost,
   setCurrentConversation,
+  setCurrentType,
 } from "../../redux/actions/profiles";
 import ConversationListItem from "../ConversationListItem";
-import ConversationSearch from "../ConversationSearch";
 import {
   FETCH_TWILIO_MESSAGES,
   GET_TWILIO_CHANNEL,
@@ -28,6 +28,8 @@ export default function TabPostContent(props) {
           haveResponsePerson: false,
         })
       );
+      dispatch(setCurrentPost(null));
+      dispatch(setCurrentType(null));
       dispatch({
         type: FETCH_TWILIO_MESSAGES,
         payload: [],
@@ -53,13 +55,13 @@ export default function TabPostContent(props) {
   };
   return (
     <Fragment>
-      <ConversationSearch />
+      {/* <ConversationSearch /> */}
       {posts &&
         posts.map((post) => (
           <ConversationListItem
             handleClickListItem={() => handleClickListItem(post.id)}
             {...post}
-            photo={`https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg`}
+            photo={`logo_user.jpg`}
           />
         ))}
     </Fragment>

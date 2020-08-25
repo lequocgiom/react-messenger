@@ -94,9 +94,7 @@ export default function CommentList(props) {
             renderItem={(item) => (
               <List.Item key={item.id}>
                 <List.Item.Meta
-                  avatar={
-                    <Avatar src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg" />
-                  }
+                  avatar={<Avatar src="logo_user.jpg" />}
                   title={<a href="https://ant.design">Test User</a>}
                   description={moment(item.created_time).format(
                     "DD-MM-YY, HH:mm"

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const com = {};
 
-com.root = "https://0e53d90ad5af.ngrok.io";
+com.root = "https://022b1cb583cc.ngrok.io";
 
 com.setAuthToken = (token) => {
   if (token) {

@@ -32,3 +32,4 @@ export const LOGOUT = "LOGOUT";
 export const GET_PROFILE = "GET_PROFILE";
 
 export const SET_CURRENT_STATUS = "SET_CURRENT_STATUS";
+export const SET_CURRENT_TYPE = "SET_CURRENT_TYPE";

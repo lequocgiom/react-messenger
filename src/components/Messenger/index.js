@@ -6,6 +6,7 @@ import "./Messenger.css";
 import { useSelector } from "react-redux";
 export default function Messenger(props) {
   const currentTab = useSelector((state) => state.profile.currentTab);
+  const currentType = useSelector((state) => state.profile.currentType);
   return (
     <>
       <div className="messenger">
@@ -17,6 +18,10 @@ export default function Messenger(props) {
           {currentTab == 2 ? (
             <MessageList />
           ) : currentTab == 3 ? (
+            <CommentList />
+          ) : currentType == "conversation" ? (
+            <MessageList />
+          ) : currentType == "post" ? (
             <CommentList />
           ) : null}
         </div>

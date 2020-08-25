@@ -8,6 +8,7 @@ import {
   SET_CURRENT_POST,
   FETCH_COMMENT_BYPOST,
   FETCH_COMMENT_BYPOST_ERROR,
+  SET_CURRENT_TYPE,
 } from "./types";
 import com from "../../utils";
 import Axios from "axios";
@@ -81,6 +82,13 @@ export const setCurrentPost = (id) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_POST,
     payload: id,
+  });
+};
+
+export const setCurrentType = (value) => (dispatch) => {
+  dispatch({
+    type: SET_CURRENT_TYPE,
+    payload: value,
   });
 };
 

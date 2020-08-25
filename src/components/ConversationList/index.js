@@ -15,6 +15,7 @@ import TabPostContent from "./TabPostContent";
 import { Button } from "antd";
 import { PoweroffOutlined } from "@ant-design/icons";
 import { logout } from "../../redux/actions/auth";
+import TabAllContent from "./TabAllContent";
 const { TabPane } = Tabs;
 
 export default function ConversationList(props) {
@@ -40,7 +41,7 @@ export default function ConversationList(props) {
             }
             key="1"
           >
-            <TabMessageContent />
+            <TabAllContent />
           </TabPane>
           <TabPane
             tab={

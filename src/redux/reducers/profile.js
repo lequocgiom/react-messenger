@@ -9,6 +9,7 @@ import {
   FETCH_COMMENT_BYPOST,
   FETCH_COMMENT_BYPOST_ERROR,
   SET_CURRENT_STATUS,
+  SET_CURRENT_TYPE,
 } from "../actions/types";
 
 const initialState = {
@@ -84,6 +85,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         currentStatus: payload,
+      };
+    case SET_CURRENT_TYPE:
+      return {
+        ...state,
+        currentType: payload,
       };
     default:
       return state;

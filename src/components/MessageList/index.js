@@ -46,7 +46,7 @@ export default function MessageList(props) {
   useEffect(
     () => {
       mapTwilioMessages();
-      scrollToBottom();
+      // scrollToBottom();
     },
     [messagesTwilio]
   );
@@ -56,7 +56,7 @@ export default function MessageList(props) {
       console.log(messages);
       scrollToBottom();
     },
-    [messages]
+    [messages.length]
   );
   useEffect(
     () => {
@@ -74,7 +74,7 @@ export default function MessageList(props) {
               timestamp: message.timestamp,
             })
           );
-          scrollToBottom();
+          // scrollToBottom();
         });
       }
 
@@ -198,7 +198,7 @@ export default function MessageList(props) {
                 <>
                   <Avatar
                     size={36}
-                    src="https://media.thethao247.vn/upload/cuongnm/2020/04/28/guc-nga-truoc-nhan-sac-cua-hot-girl-bong-ro-xinh-dep-nhat-trung-quoc1588047165.jpg"
+                    src="logo_user.jpg"
                     className="cursor-pointer avatar-mr"
                   />
                   {MY_USER_ID && <Text>{MY_USER_ID}</Text>}
