@@ -11,6 +11,7 @@ import { fetchCommentByPost } from "../../redux/actions/profiles";
 import Axios from "axios";
 import com from "../../utils";
 import moment from "moment";
+import CommentItem from "./CommentItem";
 const { Text } = Typography;
 const fakeDataUrl =
   "https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo";
@@ -89,7 +90,8 @@ export default function CommentList(props) {
           hasMore={!loading && hasMore}
           useWindow={false}
         >
-          <List
+          <CommentItem/>
+          {/* <List
             dataSource={data}
             renderItem={(item) => (
               <List.Item key={item.id}>
@@ -109,7 +111,7 @@ export default function CommentList(props) {
                 <Spin />
               </div>
             )}
-          </List>
+          </List> */}
         </InfiniteScroll>
       </div>
     </div>
