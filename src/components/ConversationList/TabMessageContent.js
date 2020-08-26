@@ -7,10 +7,8 @@ import {
   setCurrentType,
 } from "../../redux/actions/profiles";
 import { getTwilioChannel } from "../../redux/actions/twilio";
-import ConversationListItem from "../ConversationListItem";
-import ConversationSearch from "../ConversationSearch";
-import Loading from "../Loading";
 import LoadingSpinner from "../App/LoadingSpinner";
+import ConversationListItem from "../ConversationListItem";
 
 export default function TabMessageContent(props) {
   //   const conversations = useSelector((state) => state.conversations);

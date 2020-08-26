@@ -1,10 +1,8 @@
+import { Typography } from "antd";
 import React, { useEffect } from "react";
 import shave from "shave";
-import { Typography, Divider } from "antd";
-
 import "./ConversationListItem.css";
 
-const { Title, Paragraph, Text } = Typography;
 export default function ConversationListItem({
   photo,
   name,

@@ -1,15 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Avatar, Card, Row, Button } from "antd";
-import "./CommentItem.scss";
-import { Typography, Space } from "antd";
-import DetailItem from "./DetailItem";
-import { useSelector } from "react-redux";
+import { Avatar, Card, Row, Space, Typography } from "antd";
 import moment from "moment";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import "./CommentItem.scss";
+import DetailItem from "./DetailItem";
+import { FacebookIcon, FacebookShareButton, TwitterIcon } from "react-share";
 const { Text, Link, Paragraph, Title } = Typography;
 
 function CommentItem({ comments }) {
   const currentPost = useSelector((state) => state.profile.currentPost);
+  const [like, setLike] = useState(false);
+
   return (
     <Card className="card">
       {/* <!-- post title start --> */}
@@ -51,20 +52,46 @@ function CommentItem({ comments }) {
         <div className="post-meta">
           <div type="primary" className="post-meta-like post-after mr-2">
             <Row align="middle">
-              <ion-icon name="heart-outline" />
-              <span className="ml-1">Likes (20)</span>
+              {!like ? (
+                <ion-icon
+                  name="heart-outline"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setLike(true)}
+                />
+              ) : (
+                <ion-icon
+                  name="heart"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setLike(false)}
+                />
+              )}
+              <span className="ml-1">Likes ({like ? 21 : 20})</span>
               {/* <strong>201</strong> */}
             </Row>
           </div>
           <div type="primary" className="post-comment post-after mr-2">
             <Row align="middle">
-              <ion-icon name="chatbox-ellipses-outline" />
+              <ion-icon
+                name="chatbox-ellipses-outline"
+                style={{ cursor: "pointer" }}
+              />
               <span className="ml-1">Comments ({comments.length})</span>
             </Row>
           </div>
           <div type="primary" className="post-share mr-2">
             <Row align="middle">
-              <ion-icon name="share-social-outline" />
+              <FacebookShareButton
+                url={"http://taikhoan.techres.vn/"}
+                quote={"Techres is awesome, join us now!"}
+                className="cursor-pointer"
+              >
+                <ion-icon
+                  name="share-social-outline"
+                  style={{ cursor: "pointer" }}
+                />
+              </FacebookShareButton>
+              {/* <TwitterIcon size={32} round={true} /> */}
+
               <span className="ml-1">Shares (07)</span>
             </Row>
           </div>

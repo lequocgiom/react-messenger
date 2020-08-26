@@ -1,7 +1,7 @@
+import { Typography } from "antd";
 import React from "react";
 import "./Toolbar.css";
 import "./Toolbar.scss";
-import { Typography, Divider } from "antd";
 
 const { Title, Paragraph, Text } = Typography;
 

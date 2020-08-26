@@ -1,17 +1,13 @@
-import { List, message, Avatar, Spin } from "antd";
-import reqwest from "reqwest";
-import React, { Component, useState, useEffect } from "react";
-import { Typography } from "antd";
-import InfiniteScroll from "react-infinite-scroller";
-import { connect, useSelector } from "react-redux";
-import Toolbar from "../Toolbar";
-import { MessageOutlined, UserAddOutlined } from "@ant-design/icons";
-import "./commentList.scss";
-import { fetchCommentByPost } from "../../redux/actions/profiles";
+import { message, Typography } from "antd";
 import Axios from "axios";
+import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroller";
+import { useSelector } from "react-redux";
+import reqwest from "reqwest";
 import com from "../../utils";
-import moment from "moment";
+import Toolbar from "../Toolbar";
 import CommentItem from "./CommentItem";
+import "./commentList.scss";
 const { Text } = Typography;
 const fakeDataUrl =
   "https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo";

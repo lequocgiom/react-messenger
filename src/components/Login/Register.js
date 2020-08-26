@@ -1,8 +1,7 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import { register } from "../../redux/actions/auth";
-
 import "./login.css";
 
 const Register = ({ register, isAuthenticated }) => {
